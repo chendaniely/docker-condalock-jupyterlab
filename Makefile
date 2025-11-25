@@ -32,6 +32,8 @@ run:
 
 .PHONY: up
 up:
+	# by default stop everything before re-creating
+	make stop
 	docker-compose up -d
 
 .PHONY: stop
