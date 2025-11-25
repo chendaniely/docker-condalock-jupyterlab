@@ -6,7 +6,7 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: all
-all: ## run the full setup (lock file, environment, and build docker image)
+all: ## runs the targets: cl, env, build
 	make cl
 	make env
 	make build
