@@ -13,11 +13,11 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: a85087e3618b97e59ae9965196195f2151eba1ffd15446625ea992e16cd42dad
-    osx-64: 3fc3261fcacadd73a88548c65f3b0b303637ca81f7686be2089c4185bb31081a
-    osx-arm64: 04f4a37abe1315ce4668d3ada1fdd7993621cc9afdcf988f834e67863b8b618a
-    win-64: da60e7158e0df7b024b9dfda83960e49d09eea8dc87889b04052a03bbf48df93
-    linux-aarch64: dec6f612f06ce078914d60c6a35de9cca1874d9b73f21925c9300e4b4fa6c670
+    linux-64: bd9639373d27b71a788c76a70594576ce16aa02a90a2876ecd84065fb57fd830
+    osx-64: d62d7eaa53eac54fdfa00f9d40e57b6108ded8d7bbe3eacc05f00db2bad8c1c0
+    osx-arm64: a7b324d40075988064a83b9942391ef690bfbd93ca6d891cdba4e7fe136b5034
+    win-64: f01dbb583039e1df8f994f4cba67562e292ad5dd625349857f2c8a2b7cbe44ed
+    linux-aarch64: 49a1b4072958afb92697263839db487def1f6f31ce1380a8685cc841d21d8d34
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -129,6 +129,96 @@ package:
   hash:
     md5: aaa2a381ccc56eac91d63b6c1240312f
     sha256: a3967b937b9abf0f2a99f3173fa4630293979bd1644709d89580e7c62a544661
+  category: main
+  optional: false
+- name: altair
+  version: 6.0.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    importlib-metadata: ''
+    jinja2: ''
+    jsonschema: '>=3.0'
+    narwhals: '>=1.27.1'
+    packaging: ''
+    python: '>=3.10'
+    typing-extensions: '>=4.12.0'
+  url: https://conda.anaconda.org/conda-forge/noarch/altair-6.0.0-pyhd8ed1ab_1.conda
+  hash:
+    md5: 36a31df7e76e845fb87f8d0a2c8c5ebf
+    sha256: c89567b3805b37393fa36f43c5f992c11b28a0f56cf3ce85c91826c78298c882
+  category: main
+  optional: false
+- name: altair
+  version: 6.0.0
+  manager: conda
+  platform: linux-aarch64
+  dependencies:
+    importlib-metadata: ''
+    jinja2: ''
+    jsonschema: '>=3.0'
+    narwhals: '>=1.27.1'
+    packaging: ''
+    python: '>=3.10'
+    typing-extensions: '>=4.12.0'
+  url: https://conda.anaconda.org/conda-forge/noarch/altair-6.0.0-pyhd8ed1ab_1.conda
+  hash:
+    md5: 36a31df7e76e845fb87f8d0a2c8c5ebf
+    sha256: c89567b3805b37393fa36f43c5f992c11b28a0f56cf3ce85c91826c78298c882
+  category: main
+  optional: false
+- name: altair
+  version: 6.0.0
+  manager: conda
+  platform: osx-64
+  dependencies:
+    importlib-metadata: ''
+    jinja2: ''
+    jsonschema: '>=3.0'
+    narwhals: '>=1.27.1'
+    packaging: ''
+    python: '>=3.10'
+    typing-extensions: '>=4.12.0'
+  url: https://conda.anaconda.org/conda-forge/noarch/altair-6.0.0-pyhd8ed1ab_1.conda
+  hash:
+    md5: 36a31df7e76e845fb87f8d0a2c8c5ebf
+    sha256: c89567b3805b37393fa36f43c5f992c11b28a0f56cf3ce85c91826c78298c882
+  category: main
+  optional: false
+- name: altair
+  version: 6.0.0
+  manager: conda
+  platform: osx-arm64
+  dependencies:
+    importlib-metadata: ''
+    jinja2: ''
+    jsonschema: '>=3.0'
+    narwhals: '>=1.27.1'
+    packaging: ''
+    python: '>=3.10'
+    typing-extensions: '>=4.12.0'
+  url: https://conda.anaconda.org/conda-forge/noarch/altair-6.0.0-pyhd8ed1ab_1.conda
+  hash:
+    md5: 36a31df7e76e845fb87f8d0a2c8c5ebf
+    sha256: c89567b3805b37393fa36f43c5f992c11b28a0f56cf3ce85c91826c78298c882
+  category: main
+  optional: false
+- name: altair
+  version: 6.0.0
+  manager: conda
+  platform: win-64
+  dependencies:
+    importlib-metadata: ''
+    jinja2: ''
+    jsonschema: '>=3.0'
+    narwhals: '>=1.27.1'
+    packaging: ''
+    python: '>=3.10'
+    typing-extensions: '>=4.12.0'
+  url: https://conda.anaconda.org/conda-forge/noarch/altair-6.0.0-pyhd8ed1ab_1.conda
+  hash:
+    md5: 36a31df7e76e845fb87f8d0a2c8c5ebf
+    sha256: c89567b3805b37393fa36f43c5f992c11b28a0f56cf3ce85c91826c78298c882
   category: main
   optional: false
 - name: annotated-types

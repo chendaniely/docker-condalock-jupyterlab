@@ -3,6 +3,7 @@ channels:
 - conda-forge
 dependencies:
 - conda-lock=>3.0.4
+- altair
 - pandas
 - pandera
 - pip
