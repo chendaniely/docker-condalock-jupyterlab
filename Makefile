@@ -1,4 +1,10 @@
 # create a separate lock file for each OS
+.PHONY: all
+all:
+	make cl
+	make env
+	make build
+
 .PHONY: cl
 cl:
 	# the linux-aarch64 is used for ARM Macs using linux docker container
