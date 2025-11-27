@@ -1,0 +1,56 @@
+name: Run Analysis
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+  # Trigger when docker-build workflow completes successfully
+  workflow_run:
+    workflows: ["Update Lock Files and Build Docker Image"]
+    types:
+      - completed
+
+jobs:
+  run-analysis:
+    # Only run if docker-build succeeded (or if manually triggered)
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Get the SHA from the triggering workflow, or use current SHA if manual
+      - name: Determine Docker image tag
+        id: docker-tag
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "sha=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Pull Docker image
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/docker-condalock-jupyterlab:${{ steps.docker-tag.outputs.sha }}
+
+      - name: Run analysis notebook
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKERHUB_USERNAME }}/docker-condalock-jupyterlab:${{ steps.docker-tag.outputs.sha }} \
+            jupyter nbconvert --to notebook --execute analysis.ipynb --output analysis-output.ipynb
+
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-results-${{ steps.docker-tag.outputs.sha }}
+          path: analysis-output.ipynb
