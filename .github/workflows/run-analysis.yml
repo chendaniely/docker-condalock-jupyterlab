@@ -14,10 +14,11 @@ on:
 
 jobs:
   run-analysis:
-    # Only run if docker-build succeeded (or if manually triggered)
+    # Run on manual trigger, successful docker-build completion, or any push to main
     if: |
       github.event_name == 'workflow_dispatch' ||
-      github.event.workflow_run.conclusion == 'success'
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
 
     steps:
