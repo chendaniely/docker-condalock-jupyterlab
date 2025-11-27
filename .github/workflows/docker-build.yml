@@ -32,6 +32,7 @@ jobs:
           python-version: '3.11'
           activate-environment: base
           auto-activate-base: true
+          conda-remove-defaults: true
 
       - name: Install conda-lock
         run: conda install -y -c conda-forge conda-lock
