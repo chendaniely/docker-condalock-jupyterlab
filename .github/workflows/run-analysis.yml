@@ -46,15 +46,15 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main
 
       # explicitly activate the dockerlock environment to run the analysis
-      # the commented line under it assumes the correct env is loaded and uses that
+      # otherwise comment out the conda run part
       - name: Run analysis notebook
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
-            bash -l -c "conda activate dockerlock && jupyter nbconvert --to notebook --execute analysis.ipynb --output analysis-output.ipynb"
-            # jupyter nbconvert --to notebook --execute analysis.ipynb --output analysis-output.ipynb
+            conda run --no-capture-output -n dockerlock \
+            jupyter nbconvert --to notebook --execute analysis.ipynb --output analysis-output.ipynb
 
       - name: Upload analysis results
         uses: actions/upload-artifact@v4
