@@ -14,12 +14,12 @@ jobs:
   update-lock-file:
     # run if environment.yml changed OR if manually triggered
     if: |
-      github.event_name == 'workflow_dispatch' || 
+      github.event_name == 'workflow_dispatch' ||
       contains(github.event.head_commit.modified, 'environment.yml')
     runs-on: ubuntu-latest
     outputs:
       lock-file-updated: ${{ steps.check-changes.outputs.changed }}
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
       - name: Install conda-lock
         shell: "bash -l {0}"
         run: conda install -y -c conda-forge conda-lock
-      
+
       - name: Run conda-lock
         shell: "bash -l {0}"
         run: make cl
@@ -66,23 +66,23 @@ jobs:
     # run if lock file was updated OR if Dockerfile changed OR manually triggered
     needs: update-lock-file
     if: |
-      always() && 
+      always() &&
       (github.event_name == 'workflow_dispatch' ||
-       needs.update-lock-file.outputs.lock-file-updated == 'true' || 
+       needs.update-lock-file.outputs.lock-file-updated == 'true' ||
        contains(github.event.head_commit.modified, 'Dockerfile'))
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Pull latest changes
         run: git pull origin ${{ github.ref_name }}
 
       # set up docker so it can build multiple architectures
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -108,5 +108,5 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:latest
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ github.sha }}
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ github.ref_name }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dockerlock:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dockerlock:buildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:buildcache,mode=max
