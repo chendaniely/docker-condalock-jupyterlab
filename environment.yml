@@ -10,5 +10,7 @@ dependencies:
 - python
 - jupyterlab
 - pointblank
+- altair
 - pip:
   - deepchecks
+  - vegafusion
