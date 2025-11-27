@@ -13,10 +13,6 @@ on:
 
 jobs:
   update-lock-file:
-    # run if environment.yml changed OR if manually triggered
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      contains(github.event.head_commit.message, 'environment.yml')
     runs-on: ubuntu-latest
     outputs:
       lock-file-updated: ${{ steps.check-changes.outputs.changed }}
@@ -64,7 +60,6 @@ jobs:
           git push origin main
 
   build-and-push-docker:
-    # run if lock file was updated OR if Dockerfile/workflow changed OR manually triggered
     needs: update-lock-file
     if: always() && needs.update-lock-file.result != 'failure'
     runs-on: ubuntu-latest
