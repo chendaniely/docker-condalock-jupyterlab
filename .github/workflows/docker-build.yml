@@ -67,9 +67,9 @@ jobs:
     needs: update-lock-file
     if: |
       always() &&
-      (github.event_name == 'workflow_dispatch' ||
-       needs.update-lock-file.outputs.lock-file-updated == 'true' ||
-       contains(github.event.head_commit.modified, 'Dockerfile'))
+      !cancelled() &&
+      (needs.update-lock-file.result == 'skipped' ||
+       needs.update-lock-file.outputs.lock-file-updated == 'true')
     runs-on: ubuntu-latest
 
     steps:
