@@ -14,5 +14,7 @@ Example repository showing:
 8. Github action that automates building and pushing the docker image to docker hub
 9. Gihub action that runs the analysis with the built container
 
+dockerhub image: <https://hub.docker.com/repository/docker/chendaniely/docker-condalock-jupyterlab/>
+
 This repository was created to supplement the materials in the
 [Reproducible and Trustworthy Workflows for Data Science](https://ubc-dsci.github.io/reproducible-and-trustworthy-workflows-for-data-science/) textbook used at the University of British Columbia.
