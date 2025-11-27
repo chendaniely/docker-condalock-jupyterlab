@@ -39,14 +39,14 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/docker-condalock-jupyterlab:${{ steps.docker-tag.outputs.sha }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ steps.docker-tag.outputs.sha }}
 
       - name: Run analysis notebook
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
-            ${{ secrets.DOCKERHUB_USERNAME }}/docker-condalock-jupyterlab:${{ steps.docker-tag.outputs.sha }} \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ steps.docker-tag.outputs.sha }} \
             jupyter nbconvert --to notebook --execute analysis.ipynb --output analysis-output.ipynb
 
       - name: Upload analysis results
