@@ -1,6 +1,9 @@
 name: Run Analysis
 
 on:
+  push:
+    branches:
+      - main
   # Manual trigger
   workflow_dispatch:
   # Trigger when docker-build workflow completes successfully
