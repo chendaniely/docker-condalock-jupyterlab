@@ -105,8 +105,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/dockerlock:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/dockerlock:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/dockerlock:${{ github.ref_name }}
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/dockerlock:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/dockerlock:buildcache,mode=max
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:latest
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ github.ref_name }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dockerlock:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dockerlock:buildcache,mode=max
