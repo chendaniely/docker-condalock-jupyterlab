@@ -7,7 +7,8 @@ on:
       - 'environment.yml'
       - 'Dockerfile'
       - 'conda-lock.yml'
-  # also all manual trigger
+      - '.github/workflows/docker-build.yml'
+  # also allow manual trigger
   workflow_dispatch:
 
 jobs:
@@ -15,8 +16,7 @@ jobs:
     # run if environment.yml changed OR if manually triggered
     if: |
       github.event_name == 'workflow_dispatch' ||
-      contains(github.event.head_commit.modified, 'environment.yml') ||
-      contains(github.event.head_commit.added, 'environment.yml')
+      contains(github.event.head_commit.message, 'environment.yml')
     runs-on: ubuntu-latest
     outputs:
       lock-file-updated: ${{ steps.check-changes.outputs.changed }}
@@ -64,11 +64,9 @@ jobs:
           git push origin main
 
   build-and-push-docker:
-    # run if lock file was updated OR if Dockerfile changed OR manually triggered
+    # run if lock file was updated OR if Dockerfile/workflow changed OR manually triggered
     needs: update-lock-file
-    if: |
-      always() &&
-      needs.update-lock-file.result != 'failure'
+    if: always() && needs.update-lock-file.result != 'failure'
     runs-on: ubuntu-latest
 
     steps:
