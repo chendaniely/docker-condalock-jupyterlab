@@ -2,16 +2,20 @@ name: Update Lock Files and Build Docker Image
 
 on:
   push:
+    # trigger when any one of these files have been changed
     paths:
       - 'environment.yml'
       - 'Dockerfile'
       - 'conda-lock.yml'
+  # also all manual trigger
   workflow_dispatch:
 
 jobs:
   update-lock-file:
-    # Only run this job if environment.yml changed
-    if: contains(github.event.head_commit.modified, 'environment.yml')
+    # run if environment.yml changed OR if manually triggered
+    if: |
+      github.event_name == 'workflow_dispatch' || 
+      contains(github.event.head_commit.modified, 'environment.yml')
     runs-on: ubuntu-latest
     outputs:
       lock-file-updated: ${{ steps.check-changes.outputs.changed }}
@@ -24,6 +28,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
+          # change this python version to match project python version
           python-version: '3.11'
       
       - name: Install conda-lock
@@ -31,7 +36,8 @@ jobs:
       
       - name: Run conda-lock
         run: make cl
-      
+
+      # checks if the conda-lock.yml file has any changes
       - name: Check for changes
         id: check-changes
         run: |
@@ -40,7 +46,8 @@ jobs:
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
-      
+
+      # if the conda-lock.yml file has changed, push the changes to the repo
       - name: Commit and push lock file
         if: steps.check-changes.outputs.changed == 'true'
         run: |
@@ -51,11 +58,12 @@ jobs:
           git push origin main
 
   build-and-push-docker:
-    # Run if lock file was updated OR if Dockerfile changed
+    # run if lock file was updated OR if Dockerfile changed OR manually triggered
     needs: update-lock-file
     if: |
       always() && 
-      (needs.update-lock-file.outputs.lock-file-updated == 'true' || 
+      (github.event_name == 'workflow_dispatch' ||
+       needs.update-lock-file.outputs.lock-file-updated == 'true' || 
        contains(github.event.head_commit.modified, 'Dockerfile'))
     runs-on: ubuntu-latest
     
@@ -65,19 +73,26 @@ jobs:
       
       - name: Pull latest changes
         run: git pull origin ${{ github.ref_name }}
-      
+
+      # set up docker so it can build multiple architectures
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
+      # log into docker hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
+      # build and push the container
+      # build intel + arm containers
+      # push the container to docker hub (under the dockerhub username)
+      # tag the container as latest, current github hash, and branch name
+      # use the hash version for fixed container version
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
