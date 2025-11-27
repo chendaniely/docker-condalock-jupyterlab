@@ -15,7 +15,8 @@ jobs:
     # run if environment.yml changed OR if manually triggered
     if: |
       github.event_name == 'workflow_dispatch' ||
-      contains(github.event.head_commit.modified, 'environment.yml')
+      contains(github.event.head_commit.modified, 'environment.yml') ||
+      contains(github.event.head_commit.added, 'environment.yml')
     runs-on: ubuntu-latest
     outputs:
       lock-file-updated: ${{ steps.check-changes.outputs.changed }}
@@ -67,9 +68,7 @@ jobs:
     needs: update-lock-file
     if: |
       always() &&
-      !cancelled() &&
-      (needs.update-lock-file.result == 'skipped' ||
-       needs.update-lock-file.outputs.lock-file-updated == 'true')
+      needs.update-lock-file.result != 'failure'
     runs-on: ubuntu-latest
 
     steps:
