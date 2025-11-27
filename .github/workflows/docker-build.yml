@@ -23,21 +23,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
+      # use a different environment name, base is a reserved environment name
       - name: Set up Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           # change this python version to match project python version
           python-version: '3.11'
-          activate-environment: base
-          auto-activate-base: true
+          activate-environment: dockerlock
           conda-remove-defaults: true
 
       - name: Install conda-lock
+        shell: "bash -l {0}"
         run: conda install -y -c conda-forge conda-lock
       
       - name: Run conda-lock
+        shell: "bash -l {0}"
         run: make cl
 
       # checks if the conda-lock.yml file has any changes
