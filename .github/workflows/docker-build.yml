@@ -30,9 +30,11 @@ jobs:
           auto-update-conda: true
           # change this python version to match project python version
           python-version: '3.11'
-      
+          activate-environment: base
+          auto-activate-base: true
+
       - name: Install conda-lock
-        run: conda install -c conda-forge conda-lock
+        run: conda install -y -c conda-forge conda-lock
       
       - name: Run conda-lock
         run: make cl
