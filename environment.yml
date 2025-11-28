@@ -1,15 +1,15 @@
 name: dockerlock
 channels:
-- conda-forge
-dependencies:
-- altair
-- conda-lock=>3.0.4
-- jupyterlab
-- pandas
-- pandera
-- pip
-- pointblank
-- python
-- pip:
-  - deepchecks
-  - vegafusion
+  - conda-forge
+  dependencies:
+    - altair
+    - conda-lock=>3.0.4
+    - jupyterlab
+    - pandas
+    - pandera
+    - pip
+    - pointblank
+    - python
+    - pip:
+      - deepchecks
+      - vegafusion
