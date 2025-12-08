@@ -85,6 +85,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Get short SHA
+        id: sha
+        run: echo "short=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
       # build and push the container
       # build intel + arm containers
       # push the container to docker hub (under the dockerhub username)
@@ -99,6 +103,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:latest
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ steps.sha.outputs }}
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:${{ github.ref_name }}
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:buildcache,mode=max
