@@ -22,6 +22,10 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
   rm quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz && \
   ln -s /opt/quarto/bin/quarto /usr/local/bin/quarto
 
+# Install tinytex for pdf rendering
+# Note quarto ships with Typst for pdf rendering already
+RUN quarto install tinytex --update-path
+
 # Install conda packages -----
 
 # copy the lockfile into the container
