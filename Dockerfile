@@ -54,7 +54,7 @@ EXPOSE 8888
 
 # sets the default working directory
 # this is also specified in the compose file
-WORKDIR /workplace
+WORKDIR /workspace
 
 # print some checks
 RUN quarto --version
