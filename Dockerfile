@@ -1,6 +1,26 @@
 # use the miniforge base, make sure you specify a verion
 FROM condaforge/miniforge3:latest
 
+
+# Install quarto -----
+# install Quarto based on target architecture
+ARG TARGETARCH
+ARG QUARTO_VERSION=1.8.26
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+  QUARTO_ARCH="amd64"; \
+  elif [ "$TARGETARCH" = "arm64" ]; then \
+  QUARTO_ARCH="arm64"; \
+  else \
+  echo "Unsupported architecture: $TARGETARCH" && exit 1; \
+  fi && \
+  curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz && \
+  mkdir -p /opt/quarto && \
+  tar -xzf quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz -C /opt/quarto --strip-components=1 && \
+  rm quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz && \
+  ln -s /opt/quarto/bin/quarto /usr/local/bin/quarto
+
+# Install conda packages -----
+
 # copy the lockfile into the container
 COPY conda-lock.yml conda-lock.yml
 
