@@ -1,6 +1,9 @@
 # use the miniforge base, make sure you specify a verion
 FROM condaforge/miniforge3:latest
 
+# Install curl -----
+# used to download files
+RUN apt-get update && apt-get install -y curl
 
 # Install quarto -----
 # install Quarto based on target architecture
