@@ -11,6 +11,8 @@ dependencies:
 - pointblank
 - python
 - seaborn
+# as of Dec 2025, conda has matplotlib=3.10.8, but only 3.10.7 is on pypi
+- matplotlib=3.10.7
 - pip:
   - deepchecks
   - vegafusion
