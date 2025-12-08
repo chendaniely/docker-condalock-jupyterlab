@@ -10,6 +10,7 @@ dependencies:
 - pip
 - pointblank
 - python
+- seaborn
 - pip:
   - deepchecks
   - vegafusion
