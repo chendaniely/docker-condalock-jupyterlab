@@ -4,6 +4,7 @@ FROM condaforge/miniforge3:latest
 # Install additionaly system packages -----
 # curl: used to download files
 # texlive: quarto install tinytex does not work for ARM64
+# xetex is needed for jupyter and quarto pdf rendering
 RUN apt-get update && apt-get install -y \
   curl \
   texlive-latex-base \
