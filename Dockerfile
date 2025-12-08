@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# If you can, only edit below this line
+# otherwise you will re-build the texlive install layer
+
 # Install quarto -----
 # install Quarto based on target architecture
 ARG TARGETARCH
@@ -30,7 +33,9 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
   mkdir -p /opt/quarto && \
   tar -xzf quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz -C /opt/quarto --strip-components=1 && \
   rm quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz && \
-  ln -s /opt/quarto/bin/quarto /usr/local/bin/quarto
+  ln -s /opt/quarto/bin/quarto /usr/local/bin/quarto && \
+  # Clean up quarto installation files we don't need
+  rm -rf /opt/quarto/share/jupyter
 
 # Install conda packages -----
 
@@ -38,10 +43,14 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
 COPY conda-lock.yml conda-lock.yml
 
 # setup conda-lock
-RUN conda install -n base -c conda-forge conda-lock -y
-
 # install packages from lockfile into dockerlock environment
-RUN conda-lock install -n dockerlock conda-lock.yml
+# clean up files (to save space)
+RUN conda install -n base -c conda-forge conda-lock -y && \
+  conda-lock install -n dockerlock conda-lock.yml && \
+  # Clean up conda caches and unnecessary files
+  conda clean -afy && \
+  rm -rf /opt/conda/pkgs/* && \
+  rm conda-lock.yml
 
 # make dockerlock the default environment
 RUN echo "source /opt/conda/etc/profile.d/conda.sh && conda activate dockerlock" >> ~/.bashrc
@@ -56,10 +65,6 @@ EXPOSE 8888
 # sets the default working directory
 # this is also specified in the compose file
 WORKDIR /workspace
-
-# print some checks
-RUN quarto --version
-RUN quarto check
 
 # run JupyterLab on container start
 # uses the jupyterlab from the install environment
