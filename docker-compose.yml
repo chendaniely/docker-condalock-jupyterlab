@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    # this pulls from a local docker build, not from dockerhub
     image: dockerlock
     container_name: dockerlock
     ports:
