@@ -1,5 +1,12 @@
 .DEFAULT_GOAL := help
 
+# Docker configuration
+# these variables are used for the docker container build names
+# you can override these variables in the actual make command:
+# make docker-buildx-push DOCKERHUB_USERNAME=myusername DOCKERHUB_REPONAME=myrepo
+DOCKERHUB_USERNAME := chendaniely
+DOCKERHUB_REPONAME := docker-condalock-jupyterlab
+
 .PHONY: help
 help: ## Show this help message
 	@echo "Available commands:"
@@ -32,6 +39,15 @@ env: ## remove previous and create environment from lock file
 build: ## build the docker image from the Dockerfile
 	docker build -t dockerlock --file Dockerfile .
 
+# this builds the username/imagename:local tag
+# this is the format you need for dockerhub
+# you can re-tag this to push but only builds for current arch
+.PHONY: docker-build-local
+docker-build-local: ## Build single-arch image for local testing (current platform only)
+	docker build \
+		--tag $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME):local \
+		.
+
 .PHONY: run
 run: ## alias for the up target
 	make up
@@ -48,17 +64,20 @@ stop: ## stop docker-compose services
 
 # docker multi architecture build rules (from Claude) -----
 
-.PHONY: docker-build-push
-docker-build-push: ## Build and push multi-arch image to Docker Hub (amd64 + arm64)
+# this builds the username/imagename:tag version to dockerhub
+.PHONY: docker-buildx-push
+docker-buildx-push: ## Build and push multi-arch image to Docker Hub (amd64 + arm64)
 	docker buildx build \
 		--platform linux/amd64,linux/arm64 \
-		--tag chendaniely/docker-condalock-jupyterlab:latest \
-		--tag chendaniely/docker-condalock-jupyterlab:local-$(shell git rev-parse --short HEAD) \
+		--tag $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME):latest \
+		--tag $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME):local-$(shell git rev-parse --short HEAD) \
 		--push \
 		.
 
-.PHONY: docker-build-local
-docker-build-local: ## Build single-arch image for local testing (current platform only)
-	docker build \
-		--tag chendaniely/docker-condalock-jupyterlab:local \
+.PHONY: docker-buildx-local
+docker-buildx-push: ## Build multi-arch image (amd64 + arm64)
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		--tag $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME):latest \
+		--tag $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME):local-$(shell git rev-parse --short HEAD) \
 		.
