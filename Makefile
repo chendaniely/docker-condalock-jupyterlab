@@ -75,7 +75,7 @@ docker-buildx-push: ## Build and push multi-arch image to Docker Hub (amd64 + ar
 		.
 
 .PHONY: docker-buildx-local
-docker-buildx-push: ## Build multi-arch image (amd64 + arm64)
+docker-buildx-local: ## Build multi-arch image (amd64 + arm64)
 	docker buildx build \
 		--platform linux/amd64,linux/arm64 \
 		--tag $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME):latest \
