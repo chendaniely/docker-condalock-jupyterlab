@@ -44,6 +44,10 @@ EXPOSE 8888
 # this is also specified in the compose file
 WORKDIR /workplace
 
+# print some checks
+RUN quarto --version
+RUN quarto check
+
 # run JupyterLab on container start
 # uses the jupyterlab from the install environment
 CMD ["conda", "run", "--no-capture-output", "-n", "dockerlock", "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--IdentityProvider.token=''", "--ServerApp.password=''"]
