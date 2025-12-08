@@ -47,7 +47,7 @@ jobs:
 
       # explicitly activate the dockerlock environment to run the analysis
       # otherwise comment out the conda run part
-      - name: Run analysis notebook
+      - name: Run analysis notebook - Jupyter Notebook
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
@@ -56,8 +56,58 @@ jobs:
             conda run --no-capture-output -n dockerlock \
             jupyter nbconvert --to notebook --execute analysis.ipynb --output analysis-output.ipynb
 
+      - name: Convert notebook to HTML - Jupyter
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
+            conda run --no-capture-output -n dockerlock \
+            jupyter nbconvert --to html analysis-output.ipynb --output analysis-jupyter.html
+
+      - name: Convert notebook to PDF - Jupyter
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
+            conda run --no-capture-output -n dockerlock \
+            jupyter nbconvert --to pdf analysis-output.ipynb --output analysis-jupyter.pdf
+
+      # run analysis with quarto
+
+      - name: Render notebook to HTML - Quarto
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
+            quarto render analysis-output.ipynb --to html
+
+      - name: Render notebook to PDF - Quarto
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
+            quarto render analysis-output.ipynb --to pdf
+
+      - name: Render notebook to Typst PDF - Quarto
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
+            quarto render analysis-output.ipynb --to typst
+
       - name: Upload analysis results
         uses: actions/upload-artifact@v4
         with:
           name: analysis-results-${{ steps.docker-tag.outputs.sha }}
-          path: analysis-output.ipynb
+          path: |
+            analysis-output.ipynb
+            analysis-jupyter.html
+            analysis-jupyter.pdf
+            analysis-output.html
+            analysis-output.pdf
+            analysis-output.typst.pdf
