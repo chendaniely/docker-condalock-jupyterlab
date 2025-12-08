@@ -1,9 +1,18 @@
 # use the miniforge base, make sure you specify a verion
 FROM condaforge/miniforge3:latest
 
-# Install curl -----
-# used to download files
-RUN apt-get update && apt-get install -y curl
+# Install additionaly system packages -----
+# curl: used to download files
+# texlive: quarto install tinytex does not work for ARM64
+RUN apt-get update && apt-get install -y \
+  curl \
+  texlive-latex-base \
+  texlive-latex-extra \
+  texlive-fonts-recommended \
+  texlive-fonts-extra \
+  texlive-xetex \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 # Install quarto -----
 # install Quarto based on target architecture
@@ -21,10 +30,6 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
   tar -xzf quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz -C /opt/quarto --strip-components=1 && \
   rm quarto-${QUARTO_VERSION}-linux-${QUARTO_ARCH}.tar.gz && \
   ln -s /opt/quarto/bin/quarto /usr/local/bin/quarto
-
-# Install tinytex for pdf rendering
-# Note quarto ships with Typst for pdf rendering already
-RUN quarto install tinytex --update-path
 
 # Install conda packages -----
 
