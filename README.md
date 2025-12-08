@@ -18,3 +18,7 @@ dockerhub image: <https://hub.docker.com/repository/docker/chendaniely/docker-co
 
 This repository was created to supplement the materials in the
 [Reproducible and Trustworthy Workflows for Data Science](https://ubc-dsci.github.io/reproducible-and-trustworthy-workflows-for-data-science/) textbook used at the University of British Columbia.
+
+## Changelog
+
+2025-12-08: Now with quarto!
