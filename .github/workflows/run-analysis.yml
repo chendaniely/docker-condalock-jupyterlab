@@ -84,14 +84,6 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
             quarto render analysis-output.ipynb --to html
 
-      - name: Render notebook to PDF - Quarto
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \
-            -w /workspace \
-            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
-            quarto render analysis-output.ipynb --to pdf
-
       - name: Render notebook to Typst PDF - Quarto
         run: |
           docker run --rm \
@@ -99,6 +91,14 @@ jobs:
             -w /workspace \
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
             quarto render analysis-output.ipynb --to typst
+
+      - name: Render notebook to PDF - Quarto
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:main \
+            quarto render analysis-output.ipynb --to pdf
 
       - name: Upload analysis results
         uses: actions/upload-artifact@v4
