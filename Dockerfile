@@ -5,15 +5,13 @@ FROM condaforge/miniforge3:latest
 # curl: used to download files
 # texlive: quarto install tinytex does not work for ARM64
 # xetex is needed for jupyter and quarto pdf rendering
-# lmodern for quarto pdf luatex
 RUN apt-get update && apt-get install -y \
   curl \
-  texlive-latex-base \
-  texlive-latex-extra \
+  #texlive-latex-base \
+  #texlive-latex-extra \
   texlive-fonts-recommended \
   texlive-fonts-extra \
   texlive-xetex \
-  lmodern \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
