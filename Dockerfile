@@ -7,6 +7,7 @@ FROM condaforge/miniforge3:latest
 # xetex is needed for jupyter and quarto pdf rendering
 RUN apt-get update && apt-get install -y \
   curl \
+  make \
   #texlive-latex-base \
   #texlive-latex-extra \
   texlive-fonts-recommended \
